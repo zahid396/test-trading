@@ -1,0 +1,44 @@
+# Secrets / environment
+.env
+.env.*
+!.env.example
+
+# VCS
+.git
+.gitignore
+.github
+.gitlab
+
+# Node
+node_modules
+.npmrc
+npm-debug.log*
+
+# Composer
+vendor
+auth.json
+
+# IDE / OS
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Build-time generated (rebuilt inside Docker)
+public/build
+public/hot
+public/fonts-manifest.dev.json
+public/storage
+
+# Laravel runtime caches / logs (keep *.gitignore placeholders)
+storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/testing/*
+bootstrap/cache/*.php
+
+# Tests & docs (not used in the image)
+tests
+tmp
+*.md

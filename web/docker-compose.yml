@@ -1,0 +1,50 @@
+# Local development / verification stack for the Dockerfile.
+# Usage:  docker compose up --build
+# Then open:  http://localhost:8080   (admin: http://localhost:8080/admin/login)
+# First boot runs migrations + seeds once (admin@digitalstore.com / admin123).
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      APP_NAME: DigitalStore
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_KEY: ${APP_KEY:-base64:2HwYxPuKv4fww78D4HeOKPb0RLZ3QJ8qKlzL84rbKJg=}
+      APP_URL: http://localhost:8080
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_DATABASE: digital
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      SESSION_DRIVER: database
+      SESSION_SECURE_COOKIE: "false"
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      FILESYSTEM_DISK: local
+      MAIL_MAILER: log
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: digital
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "33061:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  mysql_data:

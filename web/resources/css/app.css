@@ -1,0 +1,12 @@
+/* Digital product e-commerce store
+   ---------------------------------
+   The admin panel and customer site rely on INLINE CSS embedded in their
+   Blade layouts (see resources/views/layouts/app.blade.php and
+   resources/views/admin/layouts/app.blade.php).
+
+   This file intentionally contains no styles. It exists solely so that the
+   `npm run build` (Vite) pipeline succeeds without errors.
+
+   Do NOT add Tailwind imports here - the @tailwindcss/vite plugin in
+   vite.config.js is already registered and processing this entry point.
+*/

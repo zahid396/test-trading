@@ -1,0 +1,81 @@
+# =====================================================================
+#  Root .htaccess - REQUIRED for shared-hosting (public_html) mode.
+#  When the whole project is uploaded as the website root, this file:
+#    1. Redirects HTTP -> HTTPS
+#    2. Serves the public assets (build/, storage/, favicon, robots)
+#    3. Blocks .env, .git and all sensitive application folders
+#    4. Routes every other request through index.php (Laravel)
+# =====================================================================
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # ------------------------------------------------------------------
+    # Redirect HTTP -> HTTPS
+    # Skips requests already marked as HTTPS (e.g. behind Cloudflare or
+    # a host proxy that sends X-Forwarded-Proto: https).
+    # ------------------------------------------------------------------
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # ------------------------------------------------------------------
+    # Let the SSL / AutoSSL / ACME verification folder work
+    # ------------------------------------------------------------------
+    RewriteRule ^\.well-known($|/) - [L]
+
+    # ------------------------------------------------------------------
+    # Block ALL hidden files/directories (.env, .git, .gitignore, ...)
+    # ------------------------------------------------------------------
+    RewriteRule ^\. - [F,L]
+
+    # ------------------------------------------------------------------
+    # Block sensitive application folders (they must never be browsed)
+    # ------------------------------------------------------------------
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|tests|vendor)/ - [F,L]
+    RewriteRule ^storage/(framework|logs|app)/ - [F,L]
+    RewriteRule ^(artisan|composer\.json|composer\.lock|package\.json|package-lock\.json|phpunit\.xml|vite\.config\.js)$ - [F,L]
+
+    # ------------------------------------------------------------------
+    # Map the public/ assets to their real location (root deployment)
+    # ------------------------------------------------------------------
+    RewriteRule ^build/(.*)$ public/build/$1 [L]
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+    RewriteRule ^favicon\.ico$ public/favicon.ico [L]
+    RewriteRule ^robots\.txt$ public/robots.txt [L]
+
+    # ------------------------------------------------------------------
+    # Block the duplicate entry point inside public/
+    # ------------------------------------------------------------------
+    RewriteRule ^public/(index\.php|\.htaccess)$ - [F,L]
+
+    # ------------------------------------------------------------------
+    # Handle Authorization Header (for authenticated files/APIs)
+    # ------------------------------------------------------------------
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # ------------------------------------------------------------------
+    # Handle X-XSRF-Token Header
+    # ------------------------------------------------------------------
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # ------------------------------------------------------------------
+    # Redirect Trailing Slashes If Not A Folder...
+    # ------------------------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # ------------------------------------------------------------------
+    # Send Requests To Front Controller...
+    # ------------------------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
