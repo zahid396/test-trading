@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             LegalPagesSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
+            JobSeeder::class,
         ]);
     }
 }

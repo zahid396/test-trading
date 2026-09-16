@@ -22,6 +22,8 @@
 .hero-cover-link .hero-img { grid-column: 2; }
 .hero-cover-link .hero-cta { cursor: pointer; }
 .video-frame { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: var(--radius-xl); border: 1px solid #223050; box-shadow: var(--shadow-xl); background: #000; cursor: pointer; }
+    @supports not (aspect-ratio: 16/9) { .video-frame { height: 0; padding-bottom: 56.25%; } }
+    @media (max-width: 768px) { .video-frame { aspect-ratio: auto; height: 0; padding-bottom: 56.25%; } }
 .video-frame .video-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .3s ease; }
 .video-frame .video-playbtn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 44px; background: rgba(20,20,20,.78); border: none; border-radius: 10px; color: #fff; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; padding-left: 3px; transition: var(--transition); box-shadow: 0 4px 18px rgba(0,0,0,.5); }
 .video-frame .video-playbtn:hover { background: linear-gradient(135deg, #f0b90b, #e2a008); color: #0b0f1c; transform: translate(-50%, -50%) scale(1.08); }
@@ -163,7 +165,7 @@
     .hero-text { grid-row: auto; order: 1; }
     .hero-text p { margin-left: auto; margin-right: auto; }
     .hero-cta { grid-row: auto; order: 3; justify-self: center; }
-    .hero-img { grid-row: auto; order: 2; flex: none; max-width: 280px; width: 100%; }
+    .hero-img { grid-column: 1; grid-row: auto; order: 2; flex: none; max-width: 280px; width: 100%; }
     .hero-img img { max-height: 320px; }
     .hero-cover-link { grid-template-columns: 1fr; text-align: center; }
     .hero-cover-link .hero-text { order: 1; }
@@ -392,6 +394,25 @@
 </section>
 @endif
 
+@if(isset($jobs) && $jobs->count())
+<section class="section" style="background:var(--gray-100);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Job Circulars</h2>
+            <p>Apply to opportunities &amp; take the next step in your career</p>
+        </div>
+        <div class="jcard-grid">
+            @foreach($jobs as $job)
+                @include('partials.job-card', ['job' => $job])
+            @endforeach
+        </div>
+        <div style="text-align:center;margin-top:1.5rem;">
+            <a href="{{ route('jobs.index') }}" class="view-all-link">View All Jobs →</a>
+        </div>
+    </div>
+</section>
+@endif
+
 @if(isset($reviews) && $reviews->count())
 <section class="section" id="reviews" style="background:var(--gray-100);">
     <div class="container">
@@ -474,7 +495,7 @@
         frame.addEventListener('click', function play(){
             frame.removeEventListener('click', play);
             var iframe = document.createElement('iframe');
-            iframe.src = 'https://www.youtube.com/embed/' + vid + '?autoplay=1&playsinline=1&rel=0';
+            iframe.src = 'https://www.youtube.com/embed/' + vid + '?autoplay=1&controls=1&playsinline=1&rel=0';
             iframe.title = 'Banner video';
             iframe.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen');
             iframe.setAttribute('allowfullscreen', '');

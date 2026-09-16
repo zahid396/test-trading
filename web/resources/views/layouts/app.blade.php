@@ -113,6 +113,77 @@
         .ticker-item .down { color: var(--down); font-weight: 700; }
         @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
+        /* ── Job Cards & Jobs Pages ── */
+        .jobs-header { padding: 3rem 0 1.5rem; text-align: center; }
+        .jobs-header h1 { font-size: 1.9rem; font-weight: 800; color: var(--gray-900); }
+        .jobs-header p { color: var(--gray-500); margin-top: .5rem; font-size: 1rem; }
+        .jobs-toolbar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: center; margin-bottom: 2rem; }
+        .jobs-toolbar .jt-input { background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 50px; padding: .6rem 1.25rem; font-size: .9rem; color: var(--gray-800); min-width: 220px; }
+        .jobs-toolbar .jt-input:focus { outline: none; border-color: var(--primary); }
+        .jobs-toolbar select.jt-input { min-width: 160px; }
+        .jobs-toolbar .jt-btn { border-radius: 50px; padding: .6rem 1.4rem; border: none; background: linear-gradient(135deg, #f0b90b, #e2a008); color: #0b0f1c; font-weight: 700; cursor: pointer; font-size: .9rem; }
+        .jcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
+        .jcard { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); cursor: pointer; border: 1px solid var(--gray-200); transition: var(--transition); display: flex; flex-direction: column; }
+        .jcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary-100); }
+        .jcard-img { position: relative; aspect-ratio: 16/9; overflow: hidden; background: var(--gray-100); }
+        .jcard-img img { width: 100%; height: 100%; object-fit: cover; }
+        .jcard-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--gray-100); }
+        .jcard-badge { position: absolute; top: .75rem; left: .75rem; background: var(--primary); color: #0b0f1c; font-size: .72rem; font-weight: 700; padding: .25rem .65rem; border-radius: 50px; }
+        .jcard-closed { position: absolute; top: .75rem; right: .75rem; background: rgba(0,0,0,.6); color: #dde5f2; font-size: .72rem; font-weight: 600; padding: .25rem .65rem; border-radius: 50px; }
+        .jcard-body { padding: 1.1rem 1.15rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
+        .jcard-title { font-size: 1.02rem; font-weight: 700; color: var(--gray-900); margin-bottom: .2rem; line-height: 1.35; }
+        .jcard-company { font-size: .82rem; color: var(--primary); font-weight: 600; margin-bottom: .4rem; }
+        .jcard-subtitle { font-size: .82rem; color: var(--gray-500); margin-bottom: .7rem; line-height: 1.5; }
+        .jcard-meta { display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .8rem; color: var(--gray-600); margin-bottom: .7rem; }
+        .jcard-deadline { font-size: .78rem; color: var(--gray-400); margin-bottom: .9rem; }
+        .jcard-deadline strong { color: var(--gray-600); }
+        .jcard-btn { margin-top: auto; width: 100%; padding: .6rem; background: var(--primary-50); color: var(--primary); font-weight: 600; font-size: .88rem; border: 1px solid rgba(240,185,11,.35); border-radius: var(--radius); cursor: pointer; transition: var(--transition); }
+        .jcard-btn:hover { background: linear-gradient(135deg, #f0b90b, #e2a008); color: #0b0f1c; border-color: transparent; }
+        .job-detail-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); }
+        .job-detail-hero { padding: 2.25rem 2rem; display: flex; align-items: flex-start; gap: 1.5rem; border-bottom: 1px solid var(--gray-200); flex-wrap: wrap; }
+        .job-detail-logo { width: 64px; height: 64px; border-radius: var(--radius-lg); overflow: hidden; background: var(--gray-100); flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gray-200); }
+        .job-detail-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .job-detail-title { font-size: 1.5rem; font-weight: 800; color: var(--gray-900); margin-bottom: .35rem; }
+        .job-detail-company { font-size: 1rem; color: var(--primary); font-weight: 600; margin-bottom: .5rem; }
+        .job-detail-chip { display: inline-flex; align-items: center; gap: .35rem; font-size: .8rem; color: var(--gray-600); background: var(--gray-100); padding: .35rem .8rem; border-radius: 50px; margin-right: .5rem; }
+        .job-detail-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+        .job-detail-deadline { margin-left: auto; text-align: right; font-size: .82rem; color: var(--gray-500); }
+        .job-detail-deadline b { display: block; font-size: .9rem; color: var(--gray-800); }
+        .job-detail-body { padding: 2rem; }
+        .job-detail-body h3 { font-size: 1.15rem; font-weight: 700; color: var(--gray-900); margin-bottom: 1rem; }
+        .job-detail-body p { color: var(--gray-600); line-height: 1.85; font-size: .95rem; margin-bottom: 1rem; white-space: pre-line; }
+        .job-detail-body ul { list-style: none; margin-bottom: 1.5rem; }
+        .job-detail-body ul li { padding: .35rem 0; font-size: .92rem; color: var(--gray-600); display: flex; align-items: flex-start; gap: .6rem; }
+        .job-detail-body ul li::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+        .apply-box { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-xl); padding: 2rem; margin-top: 2rem; box-shadow: var(--shadow-md); }
+        .apply-box h3 { font-size: 1.25rem; font-weight: 800; color: var(--gray-900); margin-bottom: .5rem; }
+        .apply-box .apply-hint { color: var(--gray-500); font-size: .88rem; margin-bottom: 1.5rem; }
+        .apply-field { margin-bottom: 1.1rem; }
+        .apply-field label { display: block; font-size: .85rem; font-weight: 600; color: var(--gray-700); margin-bottom: .4rem; }
+        .apply-field input, .apply-field textarea { width: 100%; background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: .7rem .9rem; font-size: .9rem; color: var(--gray-800); font-family: inherit; transition: var(--transition); }
+        .apply-field input:focus, .apply-field textarea:focus { outline: none; border-color: var(--primary); background: var(--gray-50); }
+        .apply-field.is-invalid input, .apply-field.is-invalid textarea { border-color: var(--down); }
+        .apply-error { font-size: .75rem; color: var(--down); margin-top: .3rem; }
+        .apply-submit { width: 100%; padding: .85rem; border: none; border-radius: var(--radius); background: linear-gradient(135deg, #f0b90b, #e2a008); color: #0b0f1c; font-family: var(--font-display); font-weight: 700; font-size: 1rem; cursor: pointer; transition: var(--transition); }
+        .apply-submit:hover { opacity: .92; transform: translateY(-1px); }
+        .job-closed-note { padding: 1rem 1.25rem; border-radius: var(--radius); background: var(--primary-50); border: 1px solid rgba(240,185,11,.35); color: var(--gray-700); font-size: .9rem; margin-top: 1.5rem; }
+        .pagination { display: flex; justify-content: center; gap: .35rem; margin-top: 2.5rem; padding: 0; }
+        .pagination a, .pagination span { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 .75rem; border-radius: var(--radius); font-weight: 500; font-size: .9rem; transition: var(--transition); }
+        .pagination a { background: var(--white); color: var(--gray-600); border: 1px solid var(--gray-200); }
+        .pagination a:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-50); }
+        .pagination .current { background: linear-gradient(135deg, #f0b90b, #e2a008); color: #0b0f1c; border: 1px solid #f0b90b; font-weight: 700; }
+        .pagination .disabled { color: var(--gray-300); pointer-events: none; }
+        .empty-state { text-align: center; padding: 4rem 1rem; }
+        .empty-state svg { margin: 0 auto 1rem; opacity: .4; }
+        .empty-state h3 { color: var(--gray-700); font-size: 1.15rem; margin-bottom: .5rem; }
+        .empty-state p { color: var(--gray-400); }
+        @media (max-width: 768px) {
+            .job-detail-hero { flex-direction: column; align-items: flex-start; }
+            .job-detail-deadline { margin-left: 0; text-align: left; margin-top: .5rem; }
+            .jobs-header { padding-top: 2.25rem; }
+            .jobs-toolbar .jt-input { width: 100%; }
+        }
+
         /* ── Utility / Responsive ── */
         @media (max-width: 768px) {
             .nav-links { display: none; }
@@ -137,7 +208,8 @@
             </a>
             <div class="nav-links">
                 <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-                <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">Products</a>
+<a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">Products</a>
+                <a href="{{ route('jobs.index') }}" class="{{ request()->routeIs('jobs.*') ? 'active' : '' }}">Jobs</a>
                 <a href="{{ route('home') }}#reviews" class="{{ request()->query('scroll') === 'reviews' ? 'active' : '' }}">Reviews</a>
                 <a href="{{ route('home') }}#about" class="{{ request()->query('scroll') === 'about' ? 'active' : '' }}">About</a>
             </div>
@@ -148,6 +220,7 @@
         <div class="mobile-menu" id="mobileMenu">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
             <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">Products</a>
+            <a href="{{ route('jobs.index') }}" class="{{ request()->routeIs('jobs.*') ? 'active' : '' }}">Jobs</a>
             <a href="{{ route('home') }}#reviews">Reviews</a>
             <a href="{{ route('home') }}#about">About</a>
         </div>
@@ -185,6 +258,7 @@
                     <ul>
                         <li><a href="{{ route('home') }}">Home</a></li>
                         <li><a href="{{ route('products.index') }}">All Products</a></li>
+                        <li><a href="{{ route('jobs.index') }}">Job Circulars</a></li>
                         <li><a href="{{ route('home') }}#reviews">Reviews</a></li>
                         <li><a href="{{ route('home') }}#about">About Us</a></li>
                     </ul>
@@ -217,6 +291,15 @@
                     <a href="{{ route('terms') }}">Terms</a>
                     <a href="{{ route('refund-policy') }}">Refund</a>
                 </div>
+                <p style="margin-top:1.25rem; display:flex; align-items:center; justify-content:center; gap:.5rem; flex-wrap:wrap; color:#5b6b8c;">
+                    <span>Developed by</span>
+                    <a href="https://wa.me/8801930119616" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">Zahidul Islam</a>
+                    <span style="color:#3a4a6e;">|</span>
+                    <a href="https://wa.me/8801930119616" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:.4rem;">
+                        @include('partials.platform-icon', ['platform' => 'whatsapp', 'size' => 15])
+                        <span style="color:var(--accent); font-weight:600;">WhatsApp: 01930-119616</span>
+                    </a>
+                </p>
             </div>
         </div>
     </footer>

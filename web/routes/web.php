@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\JobController as AdminJobController;
 use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentSettingController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\StoreSettingController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
@@ -25,6 +27,10 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/product-details/{id}', [ProductController::class, 'details'])->name('products.details');
 Route::post('/product/{product}/reviews', [PublicReviewController::class, 'store'])->middleware('throttle:20,1')->name('reviews.store');
+
+Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/job/{slug}', [JobController::class, 'show'])->name('jobs.show');
+Route::post('/jobs/{job}/apply', [JobController::class, 'apply'])->middleware('throttle:10,1')->name('jobs.apply');
 
 Route::get('/checkout/{productId}', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/checkout/submit', [CheckoutController::class, 'submit'])->middleware('throttle:30,30')->name('checkout.submit');
@@ -56,6 +62,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])->name('products.destroy');
         Route::post('/products/{product}/toggle', [AdminProductController::class, 'toggle'])->name('products.toggle');
         Route::post('/products/reorder', [AdminProductController::class, 'reorder'])->name('products.reorder');
+
+        Route::get('/jobs', [AdminJobController::class, 'index'])->name('jobs.index');
+        Route::get('/jobs/create', [AdminJobController::class, 'create'])->name('jobs.create');
+        Route::post('/jobs', [AdminJobController::class, 'store'])->name('jobs.store');
+        Route::get('/jobs/{job}/edit', [AdminJobController::class, 'edit'])->name('jobs.edit');
+        Route::put('/jobs/{job}', [AdminJobController::class, 'update'])->name('jobs.update');
+        Route::delete('/jobs/{job}', [AdminJobController::class, 'destroy'])->name('jobs.destroy');
+        Route::post('/jobs/{job}/toggle', [AdminJobController::class, 'toggle'])->name('jobs.toggle');
+        Route::get('/job-applications', [AdminJobController::class, 'applications'])->name('jobs.applications');
+        Route::put('/job-applications/{application}', [AdminJobController::class, 'updateStatus'])->name('jobs.applications.status');
 
         Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
         Route::get('/banners/create', [BannerController::class, 'create'])->name('banners.create');
