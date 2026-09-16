@@ -13,6 +13,21 @@ php artisan storage:link
 php artisan serve
 ```
 
+## Docker & Render deployment
+
+The Laravel app lives in the `web/` subfolder of this repo. Docker/`render.yaml` config sits at the repo ROOT (Render builds from the repo root):
+
+- `Dockerfile` - multi-stage: Node 22 (Vite build) + `php:8.4-apache` (do NOT downgrade to 8.3 - Symfony 8.1 needs PHP >= 8.4.1)
+- `docker/start.sh` - waits for DB, `migrate --force`, seeds ONCE if empty, `optimize`, starts Apache
+- `render.yaml` - Laravel web service only. Production DB is the EXTERNAL Aiven MySQL in `web/.env`; the password (`DB_PASSWORD`) is a Render secret (`sync: false`), never committed. `docker-compose.yml` is local-only (throwaway MySQL) and is NOT used in production.
+
+```sh
+docker compose up --build            # local test -> http://localhost:8080
+docker build -t digitalstore .       # manual build from repo root
+```
+
+Render deploy: push repo -> New Blueprint -> set secrets `APP_KEY`, `APP_URL`, `DB_PASSWORD` (all from `web/.env`; render.yaml already contains the Aiven host/port/db/user). Uploads persist on the `laravel-storage` disk mounted at `/var/www/html/web/storage/app/public`. If Aiven enforces TLS, also add `DB_URL` (Render secret) as `mysql://avnadmin:PASSWORD@HOST:PORT/defaultdb?sslmode=require`.
+
 ## Default Admin Credentials
 
 - Email: `admin@digitalstore.com`

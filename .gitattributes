@@ -1,0 +1,7 @@
+# Keep shell scripts LF-only (Docker runs them in a Linux bash shell)
+*.sh text eol=lf
+
+# Generated artifacts / build outputs - do not diff
+*.lock linguist-generated=true
+web/public/build/** linguist-generated=true
+storage/** linguist-generated=true

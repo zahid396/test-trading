@@ -1,4 +1,7 @@
-# Local development / verification stack for the Dockerfile.
+# LOCAL DEVELOPMENT ONLY - spins up its own throwaway MySQL 8 container.
+# These DB credentials (root/root, localhost) are NEVER used in production.
+# Production uses the external Aiven MySQL set via Render environment
+# variables (render.yaml) with the values from web/.env.
 # Usage:  docker compose up --build
 # Then open:  http://localhost:8080   (admin: http://localhost:8080/admin/login)
 # First boot runs migrations + seeds once (admin@digitalstore.com / admin123).

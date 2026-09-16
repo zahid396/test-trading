@@ -1,0 +1,50 @@
+# VCS
+.git
+.gitignore
+
+# Root shared-host artifacts (not used by the Docker image)
+/index.php
+/.htaccess
+/robots.txt
+/favicon.ico
+/build
+/storage
+
+# Secrets / environment (Laravel app lives in web/)
+web/.env
+web/.env.*
+!web/.env.example
+
+# Node
+web/node_modules
+web/.npmrc
+web/npm-debug.log*
+
+# Composer
+web/vendor
+web/auth.json
+
+# IDE / OS
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Build-time generated (rebuilt inside Docker)
+web/public/build
+web/public/hot
+web/public/fonts-manifest.dev.json
+web/public/storage
+
+# Laravel runtime caches / logs (keep *.gitignore placeholders)
+web/storage/logs/*.log
+web/storage/framework/cache/data/*
+web/storage/framework/testing/*
+web/bootstrap/cache/*.php
+
+# Tests & docs (not used in the image)
+web/tests
+web/tmp
+*.md

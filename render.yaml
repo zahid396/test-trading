@@ -1,0 +1,81 @@
+# =============================================================
+# Render Blueprint - Digital Product E-commerce Store (Laravel)
+#
+# Services:
+#   1. digitalstore   => Laravel web service (Docker)
+#
+# The Laravel app lives in the web/ subfolder; both Dockerfile
+# and render.yaml sit at the repo root because Render builds
+# from the repository root.
+#
+# The production database is an EXTERNAL Aiven MySQL instance.
+# Connect values (host/port/db/user) come from web/.env and are
+# stored here; the password is kept as a secret (sync: false) so
+# it is never committed to git - paste the Aiven password from
+# web/.env in the Render dashboard (digitalstore -> DB_PASSWORD).
+#
+# Usage of each key:
+#   - APP_KEY     => base64 key from web/.env (secret, never committed)
+#   - APP_URL     => https://your-app-name.onrender.com (set after first deploy)
+#   - DB_PASSWORD => Aiven password from web/.env (secret, set in dashboard)
+#
+# The laravel-storage disk persists uploaded products/banners/logos
+# across redeploys (mount path must not change).
+# =============================================================
+
+services:
+  - type: web
+    name: digitalstore
+    runtime: docker
+    repo: https://github.com/YOUR_GITHUB_USERNAME/trading-web-production
+    branch: main
+    plan: starter                # required for the persistent storage disk below
+    dockerfilePath: ./Dockerfile
+    numInstances: 1              # keep 1 - migrations run on container start
+    healthCheckPath: /
+    disk:
+      name: laravel-storage
+      mountPath: /var/www/html/web/storage/app/public   # uploaded products, banners, logos
+      sizeGB: 1
+    envVars:
+      # --- Application ---
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false              # paste the base64 key from web/.env
+      - key: APP_URL
+        sync: false              # set to https://your-app-name.onrender.com
+      - key: APP_LOCALE
+        value: en
+      - key: LOG_CHANNEL
+        value: stack
+
+      # --- Database (Aiven MySQL) ---
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: mysql-12c69d48-new-digital.j.aivencloud.com
+      - key: DB_PORT
+        value: "22913"
+      - key: DB_DATABASE
+        value: defaultdb
+      - key: DB_USERNAME
+        value: avnadmin
+      - key: DB_PASSWORD
+        sync: false              # Aiven password from web/.env - paste in dashboard (never commit)
+
+      # --- Sessions / Cache / Queue (database driver) ---
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: MAIL_MAILER
+        value: log
