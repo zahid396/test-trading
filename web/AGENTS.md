@@ -26,7 +26,7 @@ docker compose up --build            # local test -> http://localhost:8080
 docker build -t digitalstore .       # manual build from repo root
 ```
 
-Render deploy: push repo -> New Blueprint -> set secrets `APP_KEY`, `APP_URL`, `DB_PASSWORD` (all from `web/.env`; render.yaml already contains the Aiven host/port/db/user). Uploads persist on the `laravel-storage` disk mounted at `/var/www/html/web/storage/app/public`. If Aiven enforces TLS, also add `DB_URL` (Render secret) as `mysql://avnadmin:PASSWORD@HOST:PORT/defaultdb?sslmode=require`.
+Render deploy: push repo -> New Blueprint -> set secrets `APP_KEY`, `APP_URL`, `DB_PASSWORD` and `DB_URL` (all from `web/.env`). `DB_URL` is REQUIRED on Render because Aiven enforces TLS: `mysql://avnadmin:PASSWORD@HOST:PORT/defaultdb?sslmode=require` (render.yaml already contains the Aiven host/port/db/user as a fallback). Uploads persist on the `laravel-storage` disk mounted at `/var/www/html/web/storage/app/public`. NOTE: `docker/start.sh` binds Apache port 80 FIRST and runs migrations/seeding in the background so Render's port scan succeeds; it also means the site returns 50x until the DB connects.
 
 ## Default Admin Credentials
 

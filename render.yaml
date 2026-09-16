@@ -65,6 +65,10 @@ services:
         value: avnadmin
       - key: DB_PASSWORD
         sync: false              # Aiven password from web/.env - paste in dashboard (never commit)
+      - key: DB_URL
+        sync: false              # REQUIRED for Aiven TLS. Paste exactly:
+                                #   mysql://avnadmin:PASSWORD@mysql-12c69d48-new-digital.j.aivencloud.com:22913/defaultdb?sslmode=require
+                                # (Overrides DB_HOST/DB_PORT/DB_DATABASE/DB_USERNAME/DB_PASSWORD)
 
       # --- Sessions / Cache / Queue (database driver) ---
       - key: SESSION_DRIVER

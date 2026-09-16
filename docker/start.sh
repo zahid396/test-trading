@@ -1,36 +1,48 @@
 #!/usr/bin/env bash
 set -e
 
-echo "==> Waiting for the database to be reachable..."
-max=120
-i=0
-until php artisan db:show --no-interaction >/dev/null 2>&1; do
-    i=$((i + 1))
-    if [ "$i" -ge "$max" ]; then
-        echo "==> ERROR: Database not reachable after ${max} attempts. Aborting."
-        exit 1
+# ---------------------------------------------------------------------------
+# DB setup runs in the BACKGROUND so Apache can bind port 80 immediately.
+# Render scans for open ports during startup - if Apache waits for the DB,
+# Render reports "No open ports detected" and may kill the service.
+# ---------------------------------------------------------------------------
+run_db_tasks() {
+    max=120
+    i=0
+
+    echo "==> [db] Waiting for the database to be reachable..."
+    until php artisan db:show --no-interaction >/dev/null 2>&1; do
+        i=$((i + 1))
+        if [ "$i" -ge "$max" ]; then
+            echo "==> [db] ERROR: Database unreachable after ${max} attempts."
+            echo "==> [db] Check: Aiven allow-list, TLS (DB_URL sslmode=require), DB_PASSWORD."
+            exit 1
+        fi
+        echo "    . [db] not ready (attempt ${i}/${max})"
+        sleep 2
+    done
+    echo "==> [db] Database connection OK."
+
+    echo "==> [db] Linking storage..."
+    php artisan storage:link --no-interaction || true
+
+    echo "==> [db] Running migrations..."
+    php artisan migrate --force --no-interaction
+
+    if [ "$(php artisan tinker --execute='echo \App\Models\Admin::query()->count() > 0 ? "seeded" : "empty";' 2>/dev/null)" != "seeded" ]; then
+        echo "==> [db] Empty database detected - seeding demo data + admin account..."
+        php artisan db:seed --force --no-interaction
+    else
+        echo "==> [db] Database already seeded - skipping."
     fi
-    echo "    . database not ready (attempt ${i}/${max}), retrying in 2s..."
-    sleep 2
-done
-echo "==> Database connection OK."
 
-echo "==> Linking storage..."
-php artisan storage:link --no-interaction || true
+    echo "==> [db] Caching config/routes/views..."
+    php artisan optimize
 
-echo "==> Running migrations..."
-php artisan migrate --force --no-interaction
+    echo "==> [db] Setup complete."
+}
 
-echo "==> Checking if database is empty (first deploy only)..."
-if [ "$(php artisan tinker --execute='echo \App\Models\Admin::query()->count() > 0 ? "seeded" : "empty";' 2>/dev/null)" != "seeded" ]; then
-    echo "==> Empty database detected - seeding demo data + admin account..."
-    php artisan db:seed --force --no-interaction
-else
-    echo "==> Database already seeded - skipping."
-fi
+run_db_tasks &
 
-echo "==> Caching config/routes/views..."
-php artisan optimize
-
-echo "==> Starting Apache..."
+echo "==> Starting Apache on port 80..."
 exec apache2-foreground
